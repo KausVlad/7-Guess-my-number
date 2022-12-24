@@ -18,10 +18,17 @@ console.log(`secretNumber ${secretNumber}`);
 let score = 20;
 let highscore = 0;
 
+const displayMessage = function (message) {
+  document.querySelector('.message').textContent = message;
+};
+const displayScore = function (score) {
+  document.querySelector('.score').textContent = score;
+};
+
 document.querySelector('.again').addEventListener('click', () => {
-  document.querySelector('.message').textContent = 'Start guessing...';
+  displayMessage('Start guessing...');
   document.querySelector('.number').textContent = '?';
-  document.querySelector('.score').textContent = 20;
+  displayScore(20);
   score = 20;
   document.querySelector('.guess').value = '';
   secretNumber = Math.trunc(Math.random() * 20) + 1;
@@ -34,50 +41,62 @@ document.querySelector('.check').addEventListener('click', () => {
   const guess = Number(document.querySelector('.guess').value);
   // console.log(guess, typeof guess);
   if (!guess) {
-    document.querySelector('.message').textContent = '⛔ No number!';
-  } else if (score > 1) {
-    //victory
-    if (guess === secretNumber) {
-      document.querySelector(
-        '.message'
-      ).textContent = `🏆 You guessed the secret number '${secretNumber}'!`;
-      document.querySelector('body').style.backgroundColor = '#60b347';
-      document.querySelector('.number').style.width = '30rem';
-      document.querySelector('.number').textContent = secretNumber;
-
-      if (highscore < score) {
-        highscore = score;
-        document.querySelector('.highscore').textContent = highscore;
-        console.log(`highscore ${highscore}`);
-      }
-    }
-
-    //not victorious states
-    else if (guess > secretNumber && Math.abs(guess - secretNumber) < 5) {
-      document.querySelector('.message').textContent =
-        '⬇ The secret number is a little smaller!';
-      score--;
-      document.querySelector('.score').textContent = score;
-    } else if (guess < secretNumber && Math.abs(guess - secretNumber) < 5) {
-      document.querySelector('.message').textContent =
-        '⬆ The secret number is a little bigger!';
-      score--;
-      document.querySelector('.score').textContent = score;
-    } else if (guess > secretNumber && Math.abs(guess - secretNumber) >= 5) {
-      document.querySelector('.message').textContent =
-        '⬇⬇⬇ The secret number is a much smaller!';
-      score -= 3;
-      document.querySelector('.score').textContent = score;
-    } else if (guess < secretNumber && Math.abs(guess - secretNumber) >= 5) {
-      document.querySelector('.message').textContent =
-        '⬆⬆⬆ The secret number is much larger!';
-      score -= 3;
-      document.querySelector('.score').textContent = score;
-    } else if (score < 0) {
-    }
-  } else {
-    document.querySelector('.message').textContent = '💥You lost the game!😭';
-    document.querySelector('.score').textContent = 0;
+    displayMessage('⛔ No number!');
   }
+  //victory
+  else if (guess === secretNumber) {
+    document.querySelector(
+      '.message'
+    ).textContent = `🏆 You guessed the secret number '${secretNumber}'!`;
+    document.querySelector('body').style.backgroundColor = '#60b347';
+    document.querySelector('.number').style.width = '30rem';
+    document.querySelector('.number').textContent = secretNumber;
+
+    if (highscore < score) {
+      highscore = score;
+      document.querySelector('.highscore').textContent = highscore;
+      console.log(`highscore ${highscore}`);
+    }
+  }
+
+  //not victorious states
+  else if (guess !== secretNumber) {
+    if (score > 1) {
+      let secretNumberDif = Math.abs(guess - secretNumber);
+      displayMessage(
+        `The secret number ${
+          secretNumberDif > 5 ? 'is a much' : 'is a little'
+        }  ${guess > secretNumber ? 'smaller!' : ' bigger!'}`
+      );
+      let scoreMult = secretNumberDif > 5 ? 2 : 0;
+      score -= 1 + scoreMult;
+      displayScore(score);
+    } else {
+      displayMessage('💥You lost the game!😭');
+      displayScore(0);
+    }
+  }
+  // } else if (guess > secretNumber && Math.abs(guess - secretNumber) < 5) {
+  //   document.querySelector('.message').textContent =
+  //     '⬇ The secret number is a little smaller!';
+  //   score--;
+  //   document.querySelector('.score').textContent = score;
+  // } else if (guess < secretNumber && Math.abs(guess - secretNumber) < 5) {
+  //   document.querySelector('.message').textContent =
+  //     '⬆ The secret number is a little bigger!';
+  //   score--;
+  //   document.querySelector('.score').textContent = score;
+  // } else if (guess > secretNumber && Math.abs(guess - secretNumber) >= 5) {
+  //   document.querySelector('.message').textContent =
+  //     '⬇⬇⬇ The secret number is a much smaller!';
+  //   score -= 3;
+  //   document.querySelector('.score').textContent = score;
+  // } else if (guess < secretNumber && Math.abs(guess - secretNumber) >= 5) {
+  //   document.querySelector('.message').textContent =
+  //     '⬆⬆⬆ The secret number is much larger!';
+  //   score -= 3;
+  //   document.querySelector('.score').textContent = score;
+  // }
+
   // console.log(score);
 });
