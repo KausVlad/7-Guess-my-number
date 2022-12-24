@@ -14,8 +14,9 @@
 // console.log((document.querySelector('.guess').value = 7));
 
 let secretNumber = Math.trunc(Math.random() * 20) + 1;
-console.log(secretNumber);
+console.log(`secretNumber ${secretNumber}`);
 let score = 20;
+let highscore = 0;
 
 document.querySelector('.again').addEventListener('click', () => {
   document.querySelector('.message').textContent = 'Start guessing...';
@@ -26,7 +27,7 @@ document.querySelector('.again').addEventListener('click', () => {
   secretNumber = Math.trunc(Math.random() * 20) + 1;
   document.querySelector('body').style.backgroundColor = '#222';
   document.querySelector('.number').style.width = '15rem';
-  console.log(secretNumber);
+  console.log(`secretNumber ${secretNumber}`);
 });
 
 document.querySelector('.check').addEventListener('click', () => {
@@ -40,10 +41,15 @@ document.querySelector('.check').addEventListener('click', () => {
       document.querySelector(
         '.message'
       ).textContent = `🏆 You guessed the secret number '${secretNumber}'!`;
-      document.querySelector('.highscore').textContent = score;
       document.querySelector('body').style.backgroundColor = '#60b347';
       document.querySelector('.number').style.width = '30rem';
       document.querySelector('.number').textContent = secretNumber;
+
+      if (highscore < score) {
+        highscore = score;
+        document.querySelector('.highscore').textContent = highscore;
+        console.log(`highscore ${highscore}`);
+      }
     }
 
     //not victorious states
